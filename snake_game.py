@@ -14,11 +14,15 @@ class SnakeGame:
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
         pygame.display.set_caption("Snake")
 
+        # Set text font, size and text --> Score
+        font = pygame.font.SysFont(self.settings.score_font, self.settings.score_size)
+        self.score_text = font.render(f'Score: {self.settings.score}', 0, self.settings.score_rgb)
+
     def draw_borders(self):
-        pygame.draw.rect(self.screen, self.settings.border_rgb, (0, 0, 10, 500))
-        pygame.draw.rect(self.screen, self.settings.border_rgb, (490, 0, 10, 500))
-        pygame.draw.rect(self.screen, self.settings.border_rgb, (0, 490, 500, 10))
-        pygame.draw.rect(self.screen, self.settings.border_rgb, (0, 0, 500, 10))
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.left_border)
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.right_border)
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.bottom_border)
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.top_border)
 
     def run_game(self):
         """Start the main loop for game"""
@@ -29,8 +33,10 @@ class SnakeGame:
 
             #Redraw the screen on each update
             self.screen.fill(self.settings.screen_rgb)
-            #Make border
+            #Draw borders
             self.draw_borders()
+            #Update score
+            self.screen.blit(self.score_text, self.settings.score_position)
 
             # Show the most recently drawn screen.
             pygame.display.flip()
