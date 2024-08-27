@@ -14,6 +14,12 @@ class SnakeGame:
         self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
         pygame.display.set_caption("Snake")
 
+    def draw_borders(self):
+        pygame.draw.rect(self.screen, self.settings.border_rgb, (0, 0, 10, 500))
+        pygame.draw.rect(self.screen, self.settings.border_rgb, (490, 0, 10, 500))
+        pygame.draw.rect(self.screen, self.settings.border_rgb, (0, 490, 500, 10))
+        pygame.draw.rect(self.screen, self.settings.border_rgb, (0, 0, 500, 10))
+
     def run_game(self):
         """Start the main loop for game"""
         while True:
@@ -23,7 +29,8 @@ class SnakeGame:
 
             #Redraw the screen on each update
             self.screen.fill(self.settings.screen_rgb)
-            #Display score on each update
+            #Make border
+            self.draw_borders()
 
             # Show the most recently drawn screen.
             pygame.display.flip()
