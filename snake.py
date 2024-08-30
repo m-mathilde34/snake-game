@@ -14,3 +14,20 @@ class Snake():
         #Set head colour
         self.snake_head = pygame.Surface((10,10))
         self.snake_head.fill((92, 64, 51))
+
+        #Set direction
+        self.direction = "UP"
+
+        #Set speed
+        self.speed = 10
+
+    def move(self):
+        if(self.direction == "RIGHT"):
+            self.snake.insert(0, (self.snake[0][0] + 10, self.snake[0][1]))
+        elif(self.direction == "LEFT"):
+            self.snake.insert(0, (self.snake[0][0] - 10, self.snake[0][1]))
+        elif(self.direction == "UP"):
+            self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 10))
+        elif(self.direction == "DOWN"):
+            self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 10))
+        self.snake.pop()
