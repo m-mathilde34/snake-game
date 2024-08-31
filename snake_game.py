@@ -12,7 +12,7 @@ class SnakeGame:
         self.settings = Settings()
 
         # Set size of game screen
-        self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Snake")
 
         # Set text font, size and text --> Score
@@ -36,8 +36,14 @@ class SnakeGame:
         while True:
             self.clock.tick(self.snake.speed)
             self.snake.move()
+            self.snake.check_wall_collision()
+            self._check_collision()
             self._check_events()
             self._update_screen()
+
+    def _check_collision(self):
+        if self.snake.is_colliding == True:
+            sys.exit()
 
     def _check_events(self):
         """Check for user input (key presses or mouse events)"""
