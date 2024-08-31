@@ -6,7 +6,7 @@ class Settings:
         # Score settings
         self.score = 0
         self.score_rgb = (255, 255, 255)
-        self.score_font = 'timenewroman'
+        self.score_font = 'arial'
         self.score_size = 40
         self.score_position = (190, 20)
 
@@ -21,3 +21,10 @@ class Settings:
         self.bottom_border = (0, 560, 520, 10)
         self.left_border = (0, 0, 10, 570)
         self.right_border = (510, 0, 10, 570)
+
+        # Game Over settings
+        self.go_background = (0, 0, 0)
+        self.go_font = 'timenewroman'
+        self.go_rgb = (255, 255, 255)
+        self.go_size = 70
+        self.restart_quit_size = 30
