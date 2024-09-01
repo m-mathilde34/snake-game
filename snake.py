@@ -1,6 +1,7 @@
 import pygame
 
 class Snake():
+    """Stores all to do with the snake."""
 
     def __init__(self, snake_game):
         self.screen = snake_game.screen
@@ -21,7 +22,12 @@ class Snake():
         #Set speed
         self.speed = 10
 
+        #Set is_colliding
+        self.is_colliding = False
+
     def move(self):
+        """Move the snake in a given direction.
+        Add a new head cell and pop off the tail. This will give the impression of movement in a given direction."""
         if(self.direction == "RIGHT"):
             self.snake.insert(0, (self.snake[0][0] + 10, self.snake[0][1]))
         elif(self.direction == "LEFT"):
@@ -31,3 +37,20 @@ class Snake():
         elif(self.direction == "DOWN"):
             self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 10))
         self.snake.pop()
+
+    def check_wall_collision(self):
+        """Method to check whether snake is colliding with wall.
+        If snake collides with wall, keep snake at same place.
+        Terminate game with a 'GAME OVER' screen.
+        Offer player to play again."""
+        if(self.snake[0][0] >= 510):
+            self.is_colliding = True
+        elif(self.snake[0][0] < 10):
+            self.is_colliding = True
+        elif(self.snake[0][1] >= 560):
+            self.is_colliding = True
+        elif(self.snake[0][1] < 60):
+            self.is_colliding = True
+        else:
+            self.is_colliding = False
+
