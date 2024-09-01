@@ -8,7 +8,6 @@ class Settings:
         self.score_rgb = (255, 255, 255)
         self.score_font = 'arial'
         self.score_size = 40
-        self.score_position = (190, 20)
 
         # Screen settings
         self.screen_width = 520
