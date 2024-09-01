@@ -21,8 +21,7 @@ class SnakeGame:
 
         # Set text font, size and text --> Score
         self.score = self.settings.score
-        score_font = pygame.font.SysFont(self.settings.score_font, self.settings.score_size)
-        self.score_text = score_font.render(f'Score: {self.score}', 0, self.settings.score_rgb)
+        self.score_font = pygame.font.SysFont(self.settings.score_font, self.settings.score_size)
 
         # Create your snake
         self.snake = self.initialise_snake()
@@ -96,6 +95,7 @@ class SnakeGame:
          - remove the food and place a new apple randomly on the board
          - augment score"""
         if self.snake.snake[0][0] == self.apple.position[0] and self.snake.snake[0][1] == self.apple.position[1]:
+            self.snake.grow()
             self.apple = self.initialise_apple()
             self.score += 1
 
@@ -129,6 +129,7 @@ class SnakeGame:
                     if event.key == pygame.K_r:
                         self.game_state = "PLAY"
                         self.snake = self.initialise_snake()
+                        self.score = 0
                     elif event.key == pygame.K_q:
                         sys.exit()
 
@@ -139,7 +140,9 @@ class SnakeGame:
         # Draw borders
         self.draw_borders()
         # Update score
-        self.screen.blit(self.score_text, self.settings.score_position)
+        score_text = self.score_font.render(f'Score: {self.score}', 0, self.settings.score_rgb)
+        score_position = (self.settings.screen_width/2 - score_text.get_width()/2, 10)
+        self.screen.blit(score_text, score_position)
         # Draw snake
         for snake_pos in self.snake.snake[1:]:
             self.screen.blit(self.snake.skin, snake_pos)
