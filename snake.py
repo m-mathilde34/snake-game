@@ -54,3 +54,14 @@ class Snake():
         else:
             self.is_colliding = False
 
+    def grow(self):
+        """When invoked, method adds one element to the body of the snake, hence making it grow 1 unit longer."""
+        if (self.direction == "RIGHT"):
+            self.snake.insert(0, (self.snake[0][0] + 10, self.snake[0][1]))
+        elif (self.direction == "LEFT"):
+            self.snake.insert(0, (self.snake[0][0] - 10, self.snake[0][1]))
+        elif (self.direction == "UP"):
+            self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 10))
+        elif (self.direction == "DOWN"):
+            self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 10))
+

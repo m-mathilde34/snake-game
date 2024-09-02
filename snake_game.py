@@ -1,9 +1,11 @@
 import sys
 import pygame
 
+import apple
 import snake
 from settings import Settings
 from snake import Snake
+from apple import Apple
 
 
 class SnakeGame:
@@ -19,11 +21,13 @@ class SnakeGame:
 
         # Set text font, size and text --> Score
         self.score = self.settings.score
-        score_font = pygame.font.SysFont(self.settings.score_font, self.settings.score_size)
-        self.score_text = score_font.render(f'Score: {self.score}', 0, self.settings.score_rgb)
+        self.score_font = pygame.font.SysFont(self.settings.score_font, self.settings.score_size)
 
         # Create your snake
         self.snake = self.initialise_snake()
+
+        # Create our first apple
+        self.apple = self.initialise_apple()
 
         # Set clock in order to control the snake's speed
         self.clock = pygame.time.Clock()
@@ -37,6 +41,11 @@ class SnakeGame:
         new_snake = snake.Snake(self)
         return new_snake
 
+    def initialise_apple(self):
+        """Initialises a new apple at a new random location."""
+        new_apple = apple.Apple()
+        return new_apple
+
     def run_game(self):
         """Start the main loop for game"""
         while True:
@@ -49,10 +58,13 @@ class SnakeGame:
                 self.snake.move()
                 self.snake.check_wall_collision()
                 self._check_collision()
+                self._check_eating()
                 self._check_events()
                 self._update_screen()
 
     def _game_over_screen(self):
+        """Create a game over screen which gives the user the option to play again or quit.
+        Show the user their final score."""
         self.screen.fill(self.settings.go_background)
         go_font = pygame.font.SysFont(self.settings.go_font, self.settings.go_size)
         restart_quit_font = pygame.font.SysFont(self.settings.go_font, self.settings.restart_quit_size)
@@ -76,9 +88,20 @@ class SnakeGame:
         if self.snake.is_colliding:
             self.game_state = "GAME_OVER"
 
+    def _check_eating(self):
+        """Check whether or not the snake is colliding with/eating the food.
+        If so:
+         - make the snake grow
+         - remove the food and place a new apple randomly on the board
+         - augment score"""
+        if self.snake.snake[0][0] == self.apple.position[0] and self.snake.snake[0][1] == self.apple.position[1]:
+            self.snake.grow()
+            self.apple = self.initialise_apple()
+            self.score += 1
+
     def _check_events(self):
-        """Check for user input (key presses or mouse events)"""
-        """When game ends in GAME OVER, check whether user wants to replay or quit.
+        """Check for user input (key presses or mouse events).
+        When game ends in GAME OVER, check whether user wants to replay or quit.
         If user wants to play again, resets game_state to PLAY and reset snake position and initial parameters."""
         if self.game_state == "PLAY":
             for event in pygame.event.get():
@@ -106,6 +129,7 @@ class SnakeGame:
                     if event.key == pygame.K_r:
                         self.game_state = "PLAY"
                         self.snake = self.initialise_snake()
+                        self.score = 0
                     elif event.key == pygame.K_q:
                         sys.exit()
 
@@ -116,16 +140,21 @@ class SnakeGame:
         # Draw borders
         self.draw_borders()
         # Update score
-        self.screen.blit(self.score_text, self.settings.score_position)
+        score_text = self.score_font.render(f'Score: {self.score}', 0, self.settings.score_rgb)
+        score_position = (self.settings.screen_width/2 - score_text.get_width()/2, 10)
+        self.screen.blit(score_text, score_position)
         # Draw snake
         for snake_pos in self.snake.snake[1:]:
             self.screen.blit(self.snake.skin, snake_pos)
         self.screen.blit(self.snake.snake_head, self.snake.snake[0])
+        # Draw apple
+        self.screen.blit(self.apple.apple, self.apple.position)
 
         # Show the most recently drawn screen.
         pygame.display.flip()
 
     def draw_borders(self):
+        """Draw the game's borders."""
         pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.left_border)
         pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.right_border)
         pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.bottom_border)
