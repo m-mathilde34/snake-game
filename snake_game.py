@@ -57,6 +57,7 @@ class SnakeGame:
                 self.clock.tick(self.snake.speed)
                 self.snake.move()
                 self.snake.check_wall_collision()
+                self.snake.check_ouroboros()
                 self._check_collision()
                 self._check_eating()
                 self._check_events()
@@ -65,6 +66,7 @@ class SnakeGame:
     def _game_over_screen(self):
         """Create a game over screen which gives the user the option to play again or quit.
         Show the user their final score."""
+
         self.screen.fill(self.settings.go_background)
         go_font = pygame.font.SysFont(self.settings.go_font, self.settings.go_size)
         restart_quit_font = pygame.font.SysFont(self.settings.go_font, self.settings.restart_quit_size)
@@ -84,8 +86,9 @@ class SnakeGame:
         pygame.display.update()
 
     def _check_collision(self):
-        """Check whether snake collides with a wall. If so : game is over"""
-        if self.snake.is_colliding:
+        """Check whether snake collides with a wall or whether it is eating itself. If so the game is over.
+        Sets the game state to GAME_OVER"""
+        if self.snake.wall_colliding or self.snake.ouroboros:
             self.game_state = "GAME_OVER"
 
     def _check_eating(self):
@@ -98,6 +101,7 @@ class SnakeGame:
             self.snake.grow()
             self.apple = self.initialise_apple()
             self.score += 1
+            self.snake.speed += self.snake.speed_increment
 
     def _check_events(self):
         """Check for user input (key presses or mouse events).
