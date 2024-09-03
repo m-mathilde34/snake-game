@@ -57,6 +57,7 @@ class SnakeGame:
                 self.clock.tick(self.snake.speed)
                 self.snake.move()
                 self.snake.check_wall_collision()
+                self.snake.check_ouroboros()
                 self._check_collision()
                 self._check_eating()
                 self._check_events()
