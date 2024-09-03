@@ -7,7 +7,7 @@ class Snake():
         self.screen = snake_game.screen
         self.screen_rect = snake_game.screen.get_rect()
 
-        self.snake = [(100, 440), (100, 450), (100, 460), (100, 470)]
+        self.snake = [(100, 440), (100, 450), (100, 460), (100, 470), (100, 480), (100, 490), (100, 500), (100, 510)]
 
         #Set skin colour
         self.skin = pygame.Surface((10,10))
@@ -21,47 +21,58 @@ class Snake():
 
         #Set speed
         self.speed = 10
+        self.speed_increment = 0.5
 
-        #Set is_colliding
-        self.is_colliding = False
+        #Set wall_colliding and ouroboros
+        self.wall_colliding = False
+        self.ouroboros = False
+
 
     def move(self):
         """Move the snake in a given direction.
         Add a new head cell and pop off the tail. This will give the impression of movement in a given direction."""
-        if(self.direction == "RIGHT"):
+        if self.direction == "RIGHT":
             self.snake.insert(0, (self.snake[0][0] + 10, self.snake[0][1]))
-        elif(self.direction == "LEFT"):
+        elif self.direction == "LEFT":
             self.snake.insert(0, (self.snake[0][0] - 10, self.snake[0][1]))
-        elif(self.direction == "UP"):
+        elif self.direction == "UP":
             self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 10))
-        elif(self.direction == "DOWN"):
+        elif self.direction == "DOWN":
             self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 10))
         self.snake.pop()
 
     def check_wall_collision(self):
         """Method to check whether snake is colliding with wall.
-        If snake collides with wall, keep snake at same place.
-        Terminate game with a 'GAME OVER' screen.
-        Offer player to play again."""
-        if(self.snake[0][0] >= 510):
-            self.is_colliding = True
-        elif(self.snake[0][0] < 10):
-            self.is_colliding = True
-        elif(self.snake[0][1] >= 560):
-            self.is_colliding = True
-        elif(self.snake[0][1] < 60):
-            self.is_colliding = True
+        If snake collides with wall, keep snake at same place. The game is then over."""
+        if self.snake[0][0] >= 510:
+            self.wall_colliding = True
+        elif self.snake[0][0] < 10:
+            self.wall_colliding = True
+        elif self.snake[0][1] >= 560:
+            self.wall_colliding = True
+        elif self.snake[0][1] < 60:
+            self.wall_colliding = True
         else:
-            self.is_colliding = False
+            self.wall_colliding = False
+
+    def check_ouroboros(self):
+        """Check whether the snake is eating itself.
+        If snake eats itself, it sets ouroboros to True.
+        Game is then over."""
+        head_x = self.snake[0][0]
+        head_y = self.snake[0][1]
+        for body_part in self.snake[1:]:
+            if head_x == body_part[0] and head_y == body_part[1]:
+                self.ouroboros = True
 
     def grow(self):
         """When invoked, method adds one element to the body of the snake, hence making it grow 1 unit longer."""
-        if (self.direction == "RIGHT"):
+        if self.direction == "RIGHT":
             self.snake.insert(0, (self.snake[0][0] + 10, self.snake[0][1]))
-        elif (self.direction == "LEFT"):
+        elif self.direction == "LEFT":
             self.snake.insert(0, (self.snake[0][0] - 10, self.snake[0][1]))
-        elif (self.direction == "UP"):
+        elif self.direction == "UP":
             self.snake.insert(0, (self.snake[0][0], self.snake[0][1] - 10))
-        elif (self.direction == "DOWN"):
+        elif self.direction == "DOWN":
             self.snake.insert(0, (self.snake[0][0], self.snake[0][1] + 10))
 
