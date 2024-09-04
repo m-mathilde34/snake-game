@@ -3,10 +3,12 @@ class Settings:
 
     def __init__(self):
         """Initialize all game settings"""
+        # General
+        self.game_font = 'arial'
+        self.font_rgb = (255, 255, 255)
+
         # Score settings
         self.score = 0
-        self.score_rgb = (255, 255, 255)
-        self.score_font = 'arial'
         self.score_size = 40
 
         # Screen settings
@@ -23,7 +25,12 @@ class Settings:
 
         # Game Over settings
         self.go_background = (0, 0, 0)
-        self.go_font = 'timenewroman'
-        self.go_rgb = (255, 255, 255)
-        self.go_size = 70
+        self.go_size = 60
         self.restart_quit_size = 30
+
+        # Start Screen settings
+        self.ss_background = (79, 121, 66)
+        self.ss_title_rgb = (228, 208, 10)
+        self.title_size = 70
+        self.start_size = 30
+        self.credits_size = 15
