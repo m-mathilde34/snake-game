@@ -2,7 +2,8 @@ import random
 
 import pygame
 
-class Apple():
+
+class Apple:
     """Stores all to do with the randomly spawning apples."""
 
     def __init__(self):
