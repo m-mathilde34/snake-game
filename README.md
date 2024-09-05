@@ -31,7 +31,7 @@ clumsiness?
 
 ### Controls :
 
-- Whilst on the start screen, press 'P' to start the game.
+- Whilst on the *start screen*, press 'P' to start the game.
 
 
 - During the game, use the directional arrows on your keyboard to move the snake:
@@ -44,4 +44,4 @@ clumsiness?
 are going left/right. You cannot go in the opposite direction straight away and need to go 'around'.
 
 
-- Whilst on the game over screen, press 'R' to restart the game. Alternatively, press 'Q' to quit.
+- Whilst on the *game over* screen, press 'R' to restart the game. Alternatively, press 'Q' to quit.
