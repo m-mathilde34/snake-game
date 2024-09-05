@@ -19,7 +19,7 @@ class SnakeGame:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Snake")
 
-        # Set text font, size and text --> Score
+        # Set Score's font and size
         self.score = self.settings.score
         self.score_font = pygame.font.SysFont(self.settings.game_font, self.settings.score_size)
 
@@ -32,12 +32,11 @@ class SnakeGame:
         # Set clock in order to control the snake's speed
         self.clock = pygame.time.Clock()
 
-        # Set the game state, i.e. : PLAY or GAME OVER
-        # This will be used in order to create a game over screen
+        # Set the game state, i.e. : START_SCREEN, PLAY or GAME OVER
         self.game_state = "START_SCREEN"
 
     def initialise_snake(self):
-        """Initialises a snake at starting position with all starting parameter values."""
+        """Initialises a snake at its starting position with all starting parameter values."""
         new_snake = snake.Snake(self)
         return new_snake
 
@@ -45,6 +44,13 @@ class SnakeGame:
         """Initialises a new apple at a new random location."""
         new_apple = apple.Apple()
         return new_apple
+
+    def draw_borders(self):
+        """Draw the game's borders."""
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.left_border)
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.right_border)
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.bottom_border)
+        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.top_border)
 
     def run_game(self):
         """Start the main loop for game"""
@@ -69,11 +75,11 @@ class SnakeGame:
 
     def _game_over_screen(self):
         """Create a game over screen which gives the user the option to play again or quit.
-        Show the user their final score."""
+        Also displays user's final score."""
 
         self.screen.fill(self.settings.go_background)
-        go_font = pygame.font.SysFont(self.settings.game_font, self.settings.go_size)
-        restart_quit_font = pygame.font.SysFont(self.settings.game_font, self.settings.restart_quit_size)
+        go_font = pygame.font.SysFont(self.settings.game_font, self.settings.go_font_size)
+        restart_quit_font = pygame.font.SysFont(self.settings.game_font, self.settings.font_size)
         go_message = go_font.render('OH NO, YOU DIED :( !', True, self.settings.font_rgb)
         final_score = restart_quit_font.render(f'Final Score : {self.score}', True, self.settings.font_rgb)
         restart = restart_quit_font.render('Restart ? - Press "R"', True, self.settings.font_rgb)
@@ -81,7 +87,7 @@ class SnakeGame:
         self.screen.blit(go_message, (self.settings.screen_width / 2 - go_message.get_width() / 2,
                                       self.settings.screen_height / 2.5 - go_message.get_height() / 2))
         self.screen.blit(final_score, (self.settings.screen_width / 2 - final_score.get_width() / 2,
-                                   self.settings.screen_height / 1.5 + final_score.get_height()))
+                                       self.settings.screen_height / 1.5 + final_score.get_height()))
         self.screen.blit(restart, (self.settings.screen_width / 2 - restart.get_width() / 2,
                                    self.settings.screen_height / 1.9 + restart.get_height()))
         self.screen.blit(quit_game, (self.settings.screen_width / 2 - quit_game.get_width() / 2,
@@ -90,44 +96,43 @@ class SnakeGame:
         pygame.display.update()
 
     def _start_screen(self):
-        """Creates a start screen which is displaying upon opening the game or upon restart after loosing.
-        Whilst the start screen is displaying, game mode is START_SCREEN"""
+        """Creates a start screen which is displaying upon opening the game."""
 
         # Load and add snake image
         image = pygame.image.load("image/snake_png.png")
         image_rect = image.get_rect()
         self.screen.blit(image, (self.screen.get_width()/2 - image.get_width()/2, 60))
-        #Paint screen one time
+        # Paint screen one time
         pygame.display.flip()
 
         # Add text
         self.screen.fill(self.settings.ss_background)
         title_font = pygame.font.SysFont(self.settings.game_font, self.settings.title_size)
-        text_font = pygame.font.SysFont(self.settings.game_font, self.settings.start_size)
-        credits_font = pygame.font.SysFont(self.settings.game_font, self.settings.credits_size)
+        text_font = pygame.font.SysFont(self.settings.game_font, self.settings.font_size)
+        credit_font = pygame.font.SysFont(self.settings.game_font, self.settings.credits_size)
         title = title_font.render("Welcome to Snake", True, self.settings.ss_title_rgb)
         start = text_font.render("Press 'P' to start playing!", True, self.settings.font_rgb)
-        credits = credits_font.render("Snake Image by artbejo from openclipart", True, self.settings.font_rgb)
+        credit = credit_font.render("Snake Image by artbejo from openclipart", True, self.settings.font_rgb)
         self.screen.blit(title, (self.settings.screen_width / 2 - title.get_width()/2,
                                  60 + image.get_height()))
         self.screen.blit(start, (self.settings.screen_width/2 - start.get_width()/2,
                                  (self.settings.screen_height / 5)*4))
-        self.screen.blit(credits, (self.settings.screen_width / 2 - title.get_width()/2,
-                                   (self.settings.screen_height-credits.get_height()-10)))
-
+        self.screen.blit(credit, (self.settings.screen_width / 2 - title.get_width()/2,
+                                   (self.settings.screen_height-credit.get_height()-10)))
 
     def _check_collision(self):
-        """Check whether snake collides with a wall or whether it is eating itself. If so the game is over.
-        Sets the game state to GAME_OVER"""
+        """Check whether snake collides with a wall or whether it is eating itself.
+        If so the game is over; Sets the game state to GAME_OVER"""
         if self.snake.wall_colliding or self.snake.ouroboros:
             self.game_state = "GAME_OVER"
 
     def _check_eating(self):
-        """Check whether or not the snake is colliding with/eating the food.
+        """Check whether the snake is colliding with/eating the food.
         If so:
          - make the snake grow
          - remove the food and place a new apple randomly on the board
-         - augment score"""
+         - increment score
+         - increment snake's speed"""
         if self.snake.snake[0][0] == self.apple.position[0] and self.snake.snake[0][1] == self.apple.position[1]:
             self.snake.grow()
             self.apple = self.initialise_apple()
@@ -136,6 +141,8 @@ class SnakeGame:
 
     def _check_events(self):
         """Check for user input (key presses or mouse events).
+        When game in PLAY, listen for user's directional input.
+        When game starts in START_SCREEN, check whether user wants to play or quit.
         When game ends in GAME OVER, check whether user wants to replay or quit.
         If user wants to play again, resets game_state to PLAY and reset snake position and initial parameters."""
         if self.game_state == "PLAY":
@@ -144,16 +151,16 @@ class SnakeGame:
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT and self.snake.direction != "LEFT":
-                        print("RIGHT")
+                        #print("RIGHT")
                         self.snake.direction = "RIGHT"
                     elif event.key == pygame.K_LEFT and self.snake.direction != "RIGHT":
-                        print("LEFT")
+                        #print("LEFT")
                         self.snake.direction = "LEFT"
                     elif event.key == pygame.K_UP and self.snake.direction != "DOWN":
-                        print("UP")
+                        #print("UP")
                         self.snake.direction = "UP"
                     elif event.key == pygame.K_DOWN and self.snake.direction != "UP":
-                        print("DOWN")
+                        #print("DOWN")
                         self.snake.direction = "DOWN"
 
         if self.game_state == "GAME_OVER":
@@ -178,7 +185,7 @@ class SnakeGame:
 
     def _update_screen(self):
         """Updates the screen every time it is called, then flip to the new screen"""
-        # Redraw the screen on each update
+        # Sets background
         self.screen.fill(self.settings.screen_rgb)
         # Draw borders
         self.draw_borders()
@@ -195,13 +202,6 @@ class SnakeGame:
 
         # Show the most recently drawn screen.
         pygame.display.flip()
-
-    def draw_borders(self):
-        """Draw the game's borders."""
-        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.left_border)
-        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.right_border)
-        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.bottom_border)
-        pygame.draw.rect(self.screen, self.settings.border_rgb, self.settings.top_border)
 
 
 if __name__ == '__main__':

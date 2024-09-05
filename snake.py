@@ -1,12 +1,10 @@
 import pygame
 
-class Snake():
+
+class Snake:
     """Stores all to do with the snake."""
 
     def __init__(self, snake_game):
-        self.screen = snake_game.screen
-        self.screen_rect = snake_game.screen.get_rect()
-
         self.snake = [(100, 440), (100, 450), (100, 460), (100, 470), (100, 480), (100, 490), (100, 500), (100, 510)]
 
         #Set skin colour
@@ -27,7 +25,6 @@ class Snake():
         self.wall_colliding = False
         self.ouroboros = False
 
-
     def move(self):
         """Move the snake in a given direction.
         Add a new head cell and pop off the tail. This will give the impression of movement in a given direction."""
@@ -42,8 +39,9 @@ class Snake():
         self.snake.pop()
 
     def check_wall_collision(self):
-        """Method to check whether snake is colliding with wall.
-        If snake collides with wall, keep snake at same place. The game is then over."""
+        """Check whether snake is colliding with wall.
+        If snake collides with wall, set wall_colliding to True.
+        Game is then over."""
         if self.snake[0][0] >= 510:
             self.wall_colliding = True
         elif self.snake[0][0] < 10:
@@ -66,7 +64,8 @@ class Snake():
                 self.ouroboros = True
 
     def grow(self):
-        """When invoked, method adds one element to the body of the snake, hence making it grow 1 unit longer."""
+        """ Allows snake to grow by one.
+        Adds a new head to increment the body of the snake, hence making it grow 1 unit longer."""
         if self.direction == "RIGHT":
             self.snake.insert(0, (self.snake[0][0] + 10, self.snake[0][1]))
         elif self.direction == "LEFT":
