@@ -77,30 +77,42 @@ class SnakeGame:
         """Create a game over screen which gives the user the option to play again or quit.
         Also displays user's final score."""
 
+        #Load and add ouroborous image
+        image = pygame.image.load("./image/ouroboros.png")
+        image_y = self.screen.get_height()/2 - image.get_height()/2
+        self.screen.blit(image, (self.screen.get_width() / 2 - image.get_width() / 2,
+                                 image_y))
+        #Paint on screen one time
+        pygame.display.flip()
+
+        #Add text
         self.screen.fill(self.settings.go_background)
         go_font = pygame.font.SysFont(self.settings.game_font, self.settings.go_font_size)
         restart_quit_font = pygame.font.SysFont(self.settings.game_font, self.settings.font_size)
-        go_message = go_font.render('OH NO, YOU DIED :( !', True, self.settings.font_rgb)
+        credit_font = pygame.font.SysFont(self.settings.game_font, self.settings.credits_size)
+
+        go_message = go_font.render('OH NO, YOU DIED!', True, self.settings.title_rgb)
         final_score = restart_quit_font.render(f'Final Score : {self.score}', True, self.settings.font_rgb)
         restart = restart_quit_font.render('Restart ? - Press "R"', True, self.settings.font_rgb)
         quit_game = restart_quit_font.render('Quit ? - Press "Q"', True, self.settings.font_rgb)
-        self.screen.blit(go_message, (self.settings.screen_width / 2 - go_message.get_width() / 2,
-                                      self.settings.screen_height / 2.5 - go_message.get_height() / 2))
-        self.screen.blit(final_score, (self.settings.screen_width / 2 - final_score.get_width() / 2,
-                                       self.settings.screen_height / 1.5 + final_score.get_height()))
-        self.screen.blit(restart, (self.settings.screen_width / 2 - restart.get_width() / 2,
-                                   self.settings.screen_height / 1.9 + restart.get_height()))
-        self.screen.blit(quit_game, (self.settings.screen_width / 2 - quit_game.get_width() / 2,
-                                     self.settings.screen_height / 2 + quit_game.get_height() / 2))
+        credit = credit_font.render("Ouroborous Image by gustavorezende from pixabay", True, self.settings.font_rgb)
 
-        pygame.display.update()
+        self.screen.blit(go_message, (self.settings.screen_width / 2 - go_message.get_width() / 2,
+                                      go_message.get_height()/2))
+        self.screen.blit(final_score, (self.settings.screen_width / 2 - final_score.get_width() / 2,
+                                       go_message.get_height() + final_score.get_height()))
+        self.screen.blit(restart, (self.settings.screen_width / 2 - restart.get_width() / 2,
+                                   self.screen.get_height() - quit_game.get_height()*2 -
+                                   restart.get_height() - credit.get_height()))
+        self.screen.blit(quit_game, (self.settings.screen_width / 2 - quit_game.get_width() / 2,
+                                     self.screen.get_height() - quit_game.get_height()*2 - credit.get_height()))
+        self.screen.blit(credit, (10, (self.settings.screen_height - credit.get_height() - 10)))
 
     def _start_screen(self):
         """Creates a start screen which is displaying upon opening the game."""
 
         # Load and add snake image
         image = pygame.image.load("image/snake_png.png")
-        image_rect = image.get_rect()
         self.screen.blit(image, (self.screen.get_width()/2 - image.get_width()/2, 60))
         # Paint screen one time
         pygame.display.flip()
@@ -110,14 +122,16 @@ class SnakeGame:
         title_font = pygame.font.SysFont(self.settings.game_font, self.settings.title_size)
         text_font = pygame.font.SysFont(self.settings.game_font, self.settings.font_size)
         credit_font = pygame.font.SysFont(self.settings.game_font, self.settings.credits_size)
-        title = title_font.render("Welcome to Snake", True, self.settings.ss_title_rgb)
+
+        title = title_font.render("Welcome to Snake", True, self.settings.title_rgb)
         start = text_font.render("Press 'P' to start playing!", True, self.settings.font_rgb)
         credit = credit_font.render("Snake Image by artbejo from openclipart", True, self.settings.font_rgb)
+
         self.screen.blit(title, (self.settings.screen_width / 2 - title.get_width()/2,
                                  60 + image.get_height()))
         self.screen.blit(start, (self.settings.screen_width/2 - start.get_width()/2,
                                  (self.settings.screen_height / 5)*4))
-        self.screen.blit(credit, (self.settings.screen_width / 2 - title.get_width()/2,
+        self.screen.blit(credit, (10,
                                    (self.settings.screen_height-credit.get_height()-10)))
 
     def _check_collision(self):
