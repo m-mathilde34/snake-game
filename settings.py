@@ -7,6 +7,7 @@ class Settings:
         self.game_font = 'arial'
         self.font_rgb = (255, 255, 255)
         self.font_size = 30
+        self.title_rgb = (228, 208, 10)
 
         # Score settings
         self.score = 0
@@ -30,6 +31,5 @@ class Settings:
 
         # Start Screen settings
         self.ss_background = (79, 121, 66)
-        self.ss_title_rgb = (228, 208, 10)
         self.title_size = 70
         self.credits_size = 15
