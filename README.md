@@ -33,8 +33,9 @@ clumsiness?
 
 - Whilst on the *start screen*, press 'P' to start the game.
 
-![Startup Screen](./image/start_screen.png)
-
+<p align="center">
+  <img src="./image/start_screen.png">
+</p>
 
 - During the game, use the directional arrows on your keyboard to move the snake:
   - &uarr; : up
@@ -42,7 +43,9 @@ clumsiness?
   - &rarr; : right
   - &larr; : left
 
-![Gameplay Image](./image/play_state.png)
+<p align="center">
+  <img src="./image/play_state.png">
+</p>
 
   If you are going up, you cannot go down. You have to first go right or left. And vice versa. The same applies if you
 are going left/right. You cannot go in the opposite direction straight away and need to go 'around'.
@@ -50,4 +53,6 @@ are going left/right. You cannot go in the opposite direction straight away and 
 
 - Whilst on the *game over* screen, press 'R' to restart the game. Alternatively, press 'Q' to quit.
 
-![Game Over Screen](./image/gameover_state.png)
+<p align="center">
+  <img src="./image/gameover_state.png">
+</p>
